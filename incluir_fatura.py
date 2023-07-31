@@ -78,11 +78,11 @@ with open('incluir_fatura.csv', 'r') as arquivo:
                 pyautogui.write(codigo)    
 
                 # Historico
-                # codigo = linha.split(';')[10]
-                # if codigo == "":
-                #         pyautogui.press("tab")
-                # else:
-                #         pyautogui.write(codigo)
+                codigo = linha.split(';')[10]
+                if codigo == "":
+                        pyautogui.press("tab")
+                else:
+                        pyautogui.write(codigo)
 
                 pyautogui.click(x=1850, y=153)
 
