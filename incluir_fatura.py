@@ -13,10 +13,11 @@ pyautogui.press("enter")
 pyautogui.click(x=69, y=193)
 pyautogui.press("tab")
 pyautogui.press("enter")
-time.sleep(3)
+time.sleep(5)
 with open('incluir_fatura.csv', 'r') as arquivo:
         for linha in arquivo:
                 
+
                 # Prefixo
                 codigo = linha.split(';')[1]
                 if codigo == "":
@@ -26,8 +27,12 @@ with open('incluir_fatura.csv', 'r') as arquivo:
 
                 # Número do título
                 codigo = linha.split(';')[2]
-                pyautogui.write(codigo)
-                pyautogui.press("tab")
+                num_codigo = len(codigo)
+                if num_codigo == 9:
+                        pyautogui.write(codigo)
+                else:
+                        pyautogui.write(codigo)
+                        pyautogui.press("tab")
 
                 # Parcela
                 codigo = linha.split(';')[3]
@@ -73,8 +78,12 @@ with open('incluir_fatura.csv', 'r') as arquivo:
                 pyautogui.write(codigo)    
 
                 # Historico
-                codigo = linha.split(';')[10]
-                if codigo == "":
-                        pyautogui.press("tab")
-                else:
-                        pyautogui.write(codigo) 
+                # codigo = linha.split(';')[10]
+                # if codigo == "":
+                #         pyautogui.press("tab")
+                # else:
+                #         pyautogui.write(codigo)
+
+                pyautogui.click(x=1850, y=153)
+
+                time.sleep(5) 
