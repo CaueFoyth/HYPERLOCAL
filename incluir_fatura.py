@@ -1,89 +1,70 @@
+# pip install OpenCV, pyautogui, CustomTkinter
+
 import pyautogui
 import time
+from tkinter import *
+import customtkinter
 
-pyautogui.PAUSE = 0.5
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("dark-blue")
 
-pyautogui.click(x=28, y=1067)
-pyautogui.press("tab")
-pyautogui.press("tab")
-pyautogui.press("tab")
-pyautogui.press("tab")
-pyautogui.press("enter")
+def incuir_fatura():
 
-pyautogui.click(x=69, y=193)
-pyautogui.press("tab")
-pyautogui.press("enter")
-time.sleep(5)
-with open('incluir_fatura.csv', 'r') as arquivo:
-        for linha in arquivo:
-                
+    pyautogui.useImageNotFoundException()
 
-                # Prefixo
-                codigo = linha.split(';')[1]
-                if codigo == "":
-                        pyautogui.press("tab")
-                else:
-                        pyautogui.write(codigo)
+    while True:
+        try:
+            x, y = pyautogui.locateCenterOnScreen('img/protheus.png', confidence=0.9)
+            pyautogui.click(x, y)
+            break
+        except pyautogui.ImageNotFoundException:
+            pass
 
-                # Número do título
-                codigo = linha.split(';')[2]
-                num_codigo = len(codigo)
-                if num_codigo == 9:
-                        pyautogui.write(codigo)
-                else:
-                        pyautogui.write(codigo)
-                        pyautogui.press("tab")
+    while True:
+        try:
+            x, y = pyautogui.locateCenterOnScreen('img/recentes.png', confidence=0.8)
+            pyautogui.click(x, y)
+            break
+        except pyautogui.ImageNotFoundException:
+            pass
 
-                # Parcela
-                codigo = linha.split(';')[3]
-                num_codigo = len(codigo)
-                if codigo == "":
-                        pyautogui.press("tab")
-                elif num_codigo == 1:
-                        codigo = codigo + " "
-                        pyautogui.write(codigo)
-                else:
-                        pyautogui.write(codigo)
+    while True:
+        try:
+            x, y = pyautogui.locateCenterOnScreen('img/contas_pagar.png', confidence=0.9) 
+            break
+        except pyautogui.ImageNotFoundException:
+            pass
 
-                # Tipo
-                codigo = linha.split(';')[4]
-                num_codigo = len(codigo)
-                if num_codigo == 2:
-                        codigo = codigo + " "
-                        pyautogui.write(codigo)
-                else:
-                        pyautogui.write(codigo)  
+    while True:
+        try:
+            veri = pyautogui.locateCenterOnScreen('img/forn.png', confidence=0.7)
+            time.sleep(2)
+            pyautogui.click(x, y)
+            break
+        except pyautogui.ImageNotFoundException:
+            pass
 
-                # Natureza
-                codigo = linha.split(';')[5]
-                pyautogui.write(codigo)
-                pyautogui.press("tab")
+    while True:
+        try:
+            x, y = pyautogui.locateCenterOnScreen('img/apagar_click.png', confidence=0.7) 
+            pyautogui.click(x, y)
+            break
+        except pyautogui.ImageNotFoundException:
+            pass
 
-                # Fornecedor
-                codigo = linha.split(';')[6]
-                pyautogui.write(codigo)
+    pyautogui.press("tab")
+    pyautogui.press("enter")     
 
-                # Loja
-                codigo = linha.split(';')[7]
-                pyautogui.write(codigo)
-                pyautogui.press("tab")
+janela = customtkinter.CTk()
+janela.title("Hyperlocal")
+janela.iconbitmap("./img/icon.ico")
+janela.geometry('1280x720')
 
-                # Vencimento
-                codigo = linha.split(';')[8]
-                pyautogui.write(codigo) 
-                pyautogui.press("tab")
+titulo = customtkinter.CTkLabel(janela, text="Automações Hyperlocal", font=("", 25))
+titulo.pack(padx=10, pady=20)
 
-                # Valor
-                codigo = linha.split(';')[9]
-                pyautogui.write(codigo)    
+botao = customtkinter.CTkButton(janela, text="Inclusão de faturas", command=incuir_fatura)
+botao.pack(padx=10, pady=10)
 
-                # Historico
-                codigo = linha.split(';')[10]
-                if codigo == "":
-                        pyautogui.press("tab")
-                else:
-                        pyautogui.write(codigo)
+janela.mainloop()
 
-                pyautogui.click(x=1850, y=153)
-
-                time.sleep(5) 
