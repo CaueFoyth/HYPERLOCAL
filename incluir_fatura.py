@@ -1,5 +1,4 @@
 # pip install OpenCV, pyautogui, CustomTkinter
-
 import pyautogui
 import time
 from tkinter import *
@@ -7,6 +6,8 @@ import customtkinter
 
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
+
+
 
 def incuir_fatura():
 
@@ -53,7 +54,10 @@ def incuir_fatura():
             pass
 
     pyautogui.press("tab")
-    pyautogui.press("enter")     
+    pyautogui.press("enter")
+    with open('teste.csv', 'r') as arquivo:
+        for linha in arquivo:
+          pyautogui.press("enter")       
 
 janela = customtkinter.CTk()
 janela.title("Hyperlocal")
