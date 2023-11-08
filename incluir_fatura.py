@@ -43,6 +43,10 @@ def abrir_arquivo():
 
                 partes = natureza_noformat.split(" ", 1)  # Divide a string em duas partes no primeiro espaço encontrado
 
+                data_vencimento = data_vencimento.strftime('%Y-%m-%d')
+                data_vencimento = data_vencimento.replace("-", "")
+                data_vencimento = data_vencimento.split(" ", 1) 
+                data_vencimento = data_vencimento.strftime('%d%m%Y')
                 if len(partes) > 1:
                     natureza = partes[0]  # Pega a primeira parte (antes do espaço)
                 else:
@@ -128,6 +132,7 @@ def abrir_arquivo():
                     pyautogui.press("tab")
                     pyautogui.press("tab")
 
+                    print(data_vencimento)
                     pyautogui.write(f"{data_vencimento}")
                     pyautogui.write(f"{valor}")
                 
