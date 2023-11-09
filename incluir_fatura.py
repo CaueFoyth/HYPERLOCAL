@@ -1,11 +1,11 @@
-# pip install OpenCV, pyautogui, CustomTkinter, pandas
+# pip install OpenCV, pyautogui, CustomTkinter, openpyxl
 import pyautogui
 import time
 from tkinter import *
 import customtkinter
 import openpyxl
 from tkinter import filedialog
-from datetime import date
+from datetime import date, datetime
 
 # Customização do layout
 customtkinter.set_appearance_mode("dark")
@@ -19,6 +19,47 @@ def abrir_arquivo():
     data_format = data_str.replace("-", "")
     numero = 0
     arquivo = filedialog.askopenfilename(filetypes=[("Arquivos Excel", "*.xlsx")])
+    pyautogui.useImageNotFoundException()
+
+    while True:
+        try:
+            x, y = pyautogui.locateCenterOnScreen('img/protheus.png', confidence=0.9)
+            pyautogui.click(x, y)
+            break
+        except pyautogui.ImageNotFoundException:
+            pass
+    while True:
+        try:
+            x, y = pyautogui.locateCenterOnScreen('img/recentes.png', confidence=0.8)
+            pyautogui.click(x, y)
+            break
+        except pyautogui.ImageNotFoundException:
+            pass
+    while True:
+        try:
+            x, y = pyautogui.locateCenterOnScreen('img/contas_pagar.png', confidence=0.9) 
+            break
+        except pyautogui.ImageNotFoundException:
+            pass
+
+    while True:
+        try:
+            veri = pyautogui.locateCenterOnScreen('img/forn.png', confidence=0.7)
+            time.sleep(2)
+            pyautogui.click(x, y)
+            break
+        except pyautogui.ImageNotFoundException:
+            pass
+
+    while True:
+        try:
+            x, y = pyautogui.locateCenterOnScreen('img/apagar_click.png', confidence=0.7) 
+            pyautogui.click(x, y)
+            break
+        except pyautogui.ImageNotFoundException:
+            pass
+    pyautogui.press("tab")
+    pyautogui.press("enter")
     if arquivo:
         try:
             workbook = openpyxl.load_workbook(arquivo)
@@ -45,8 +86,8 @@ def abrir_arquivo():
 
                 data_vencimento = data_vencimento.strftime('%Y-%m-%d')
                 data_vencimento = data_vencimento.replace("-", "")
-                data_vencimento = data_vencimento.split(" ", 1) 
-                data_vencimento = data_vencimento.strftime('%d%m%Y')
+                data_vencimento = data_vencimento.split(" ", 1)[0] 
+                data_vencimento = datetime.strptime(data_vencimento, '%Y%m%d').strftime('%d%m%Y')
                 if len(partes) > 1:
                     natureza = partes[0]  # Pega a primeira parte (antes do espaço)
                 else:
@@ -55,50 +96,6 @@ def abrir_arquivo():
                 if inserir.lower() == "não":
                     continue
                 else:
-                    pyautogui.useImageNotFoundException()
-
-                    while True:
-                        try:
-                            x, y = pyautogui.locateCenterOnScreen('img/protheus.png', confidence=0.9)
-                            pyautogui.click(x, y)
-                            break
-                        except pyautogui.ImageNotFoundException:
-                            pass
-
-                    while True:
-                        try:
-                            x, y = pyautogui.locateCenterOnScreen('img/recentes.png', confidence=0.8)
-                            pyautogui.click(x, y)
-                            break
-                        except pyautogui.ImageNotFoundException:
-                            pass
-
-                    while True:
-                        try:
-                            x, y = pyautogui.locateCenterOnScreen('img/contas_pagar.png', confidence=0.9) 
-                            break
-                        except pyautogui.ImageNotFoundException:
-                            pass
-
-                    while True:
-                        try:
-                            veri = pyautogui.locateCenterOnScreen('img/forn.png', confidence=0.7)
-                            time.sleep(2)
-                            pyautogui.click(x, y)
-                            break
-                        except pyautogui.ImageNotFoundException:
-                            pass
-
-                    while True:
-                        try:
-                            x, y = pyautogui.locateCenterOnScreen('img/apagar_click.png', confidence=0.7) 
-                            pyautogui.click(x, y)
-                            break
-                        except pyautogui.ImageNotFoundException:
-                            pass
-
-                    pyautogui.press("tab")
-                    pyautogui.press("enter")
                     
                     while True:
                         try:
@@ -134,8 +131,18 @@ def abrir_arquivo():
 
                     print(data_vencimento)
                     pyautogui.write(f"{data_vencimento}")
+                    pyautogui.press("tab")
                     pyautogui.write(f"{valor}")
-                
+
+                    while True:
+                        try:
+                            x, y = pyautogui.locateCenterOnScreen('img/salvar.png', confidence=0.9)
+                            time.sleep(1) 
+                            pyautogui.click(x, y)
+                            break
+                        except pyautogui.ImageNotFoundException:
+                            pass
+                    time.sleep(1) 
         except Exception as e:
             print(f"Erro ao ler o arquivo: {e}")
 
