@@ -11,23 +11,8 @@ from datetime import date, datetime
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
 
-
-# Função para iniciar o a inclusão de faturas
-def abrir_arquivo():
-    data = date.today()
-    data_str = data.strftime('%Y-%m-%d')
-    data_format = data_str.replace("-", "")
-    numero = 0
-    arquivo = filedialog.askopenfilename(filetypes=[("Arquivos Excel", "*.xlsx")])
-    pyautogui.useImageNotFoundException()
-
-    while True:
-        try:
-            x, y = pyautogui.locateCenterOnScreen('img/protheus.png', confidence=0.9)
-            pyautogui.click(x, y)
-            break
-        except pyautogui.ImageNotFoundException:
-            pass
+#Chegar a página de contas a pagar
+def chegar_inclusao():
     while True:
         try:
             x, y = pyautogui.locateCenterOnScreen('img/recentes.png', confidence=0.8)
@@ -60,6 +45,99 @@ def abrir_arquivo():
             pass
     pyautogui.press("tab")
     pyautogui.press("enter")
+
+#Inclusão de fatura
+def incluir_cp():
+    while True:
+        try:
+            x, y = pyautogui.locateCenterOnScreen('img/prefixo.png', confidence=0.7) 
+            pyautogui.press("tab")
+            pyautogui.write(no_tit)
+            break
+        except pyautogui.ImageNotFoundException:
+            pass
+
+            pyautogui.press("tab")
+
+            num_codigo = len(tipo)
+            if num_codigo == 2:
+                    pyautogui.write(tipo)
+                    pyautogui.press("tab")
+            else:
+                    pyautogui.write(tipo)
+
+            pyautogui.write(natureza)
+            pyautogui.press("tab")
+            
+            num_codigo = len(str(fornecedor_codigo))
+            if num_codigo >= 14:
+                fornecedor_codigo = fornecedor_codigo[:8]
+                pyautogui.write(fornecedor_codigo)
+            else:
+                fornecedor_codigo = fornecedor_codigo[:7]
+                pyautogui.write(f"0{fornecedor_codigo}")
+            
+            pyautogui.press("tab")
+            pyautogui.press("tab")
+
+            print(data_vencimento)
+            pyautogui.write(f"{data_vencimento}")
+            pyautogui.press("tab")
+            pyautogui.write(f"{valor}")
+
+            while True:
+                try:
+                    x, y = pyautogui.locateCenterOnScreen('img/salvar.png', confidence=0.9)
+                    time.sleep(1) 
+                    pyautogui.click(x, y)
+                    break
+                except pyautogui.ImageNotFoundException:
+                    pass
+            time.sleep(1) 
+
+#Abrir o protheus
+def abrir_protheus():
+    while True:
+        try:
+            x, y = pyautogui.locateCenterOnScreen('img/protheus.png', confidence=0.9)
+            pyautogui.click(x, y)
+            break
+        except pyautogui.ImageNotFoundException:
+            pass
+
+def banco_troca(cod_banco):
+    x, y = pyautogui.locateCenterOnScreen('img/totvs.png', confidence=0.9)
+    pyautogui.click(x, y)
+    pyautogui.press("tab")
+    pyautogui.press("tab")
+    pyautogui.write(cod_banco)
+    time.sleep(1)
+    pyautogui.press("enter")
+    pyautogui.press("enter")
+
+#Verificar o banco
+def verifica_banco():
+    global banco_antigo
+    banco_antigo = banco
+    if banco == "Solutions Itaú":
+        cod_banco = "0201"
+    if banco == "Serviços Itaú":
+        cod_banco = "0101"
+    if banco == "Franqueadora Itaú":
+        cod_banco = "0301"
+    banco_troca(cod_banco)
+
+# Função para iniciar o a inclusão de faturas
+def abrir_arquivo():
+    data = date.today()
+    data_str = data.strftime('%Y-%m-%d')
+    data_format = data_str.replace("-", "")
+    numero = 0
+    arquivo = filedialog.askopenfilename(filetypes=[("Arquivos Excel", "*.xlsx")])
+    pyautogui.useImageNotFoundException()
+
+    abrir_protheus()
+
     if arquivo:
         try:
             workbook = openpyxl.load_workbook(arquivo)
@@ -69,7 +147,8 @@ def abrir_arquivo():
                 if not first_row_skipped:
                     first_row_skipped = True
                     continue
-
+                
+                global banco, fornecedor, valor, data_vencimento, natureza_noformat, inserir, tipo, fornecedor_codigo, no_tit, natureza
                 banco = row[0]
                 fornecedor = row[1]
                 valor = row[2]
@@ -80,6 +159,7 @@ def abrir_arquivo():
                 fornecedor_codigo = row[11]
 
                 numero = int(numero) + 1
+                print(numero)
                 no_tit = f"{data_format}{numero}"
 
                 partes = natureza_noformat.split(" ", 1)  # Divide a string em duas partes no primeiro espaço encontrado
@@ -94,55 +174,18 @@ def abrir_arquivo():
                     natureza = natureza_noformat  # Se não houver espaço na string, resultado é a própria string original
 
                 if inserir.lower() == "não":
+                    print(inserir)
                     continue
                 else:
                     
-                    while True:
-                        try:
-                            x, y = pyautogui.locateCenterOnScreen('img/prefixo.png', confidence=0.7) 
-                            pyautogui.press("tab")
-                            pyautogui.write(no_tit)
-                            break
-                        except pyautogui.ImageNotFoundException:
-                            pass
-
-                    pyautogui.press("tab")
-
-                    num_codigo = len(tipo)
-                    if num_codigo == 2:
-                            pyautogui.write(tipo)
-                            pyautogui.press("tab")
+                    if numero != 1:
+                        if banco_antigo != banco:
+                            verifica_banco()
                     else:
-                            pyautogui.write(tipo)
+                        verifica_banco()
+                    # chegar_inclusao()
+                    # incluir_cp()
 
-                    pyautogui.write(natureza)
-                    pyautogui.press("tab")
-                    
-                    num_codigo = len(str(fornecedor_codigo))
-                    if num_codigo >= 14:
-                        fornecedor_codigo = fornecedor_codigo[:8]
-                        pyautogui.write(fornecedor_codigo)
-                    else:
-                        fornecedor_codigo = fornecedor_codigo[:7]
-                        pyautogui.write(f"0{fornecedor_codigo}")
-                    
-                    pyautogui.press("tab")
-                    pyautogui.press("tab")
-
-                    print(data_vencimento)
-                    pyautogui.write(f"{data_vencimento}")
-                    pyautogui.press("tab")
-                    pyautogui.write(f"{valor}")
-
-                    while True:
-                        try:
-                            x, y = pyautogui.locateCenterOnScreen('img/salvar.png', confidence=0.9)
-                            time.sleep(1) 
-                            pyautogui.click(x, y)
-                            break
-                        except pyautogui.ImageNotFoundException:
-                            pass
-                    time.sleep(1) 
         except Exception as e:
             print(f"Erro ao ler o arquivo: {e}")
 
