@@ -57,42 +57,44 @@ def incluir_cp():
         except pyautogui.ImageNotFoundException:
             pass
 
-            pyautogui.press("tab")
+    pyautogui.press("tab")
 
-            num_codigo = len(tipo)
-            if num_codigo == 2:
-                    pyautogui.write(tipo)
-                    pyautogui.press("tab")
-            else:
-                    pyautogui.write(tipo)
+    num_codigo = len(tipo)
+    if num_codigo == 2:
+            pyautogui.write(tipo)
+            pyautogui.press("tab")
+    else:
+            pyautogui.write(tipo)
 
-            pyautogui.write(natureza)
-            pyautogui.press("tab")
-            
-            num_codigo = len(str(fornecedor_codigo))
-            if num_codigo >= 14:
-                fornecedor_codigo = fornecedor_codigo[:8]
-                pyautogui.write(fornecedor_codigo)
-            else:
-                fornecedor_codigo = fornecedor_codigo[:7]
-                pyautogui.write(f"0{fornecedor_codigo}")
-            
-            pyautogui.press("tab")
-            pyautogui.press("tab")
+    pyautogui.write(natureza)
+    pyautogui.press("tab")
+    
+    global fornecedor_codigo
+    print(fornecedor_codigo)
+    num_codigo = len(str(fornecedor_codigo))
+    if num_codigo >= 14:
+        fornecedor_codigo = fornecedor_codigo[:8]
+        pyautogui.write(fornecedor_codigo)
+    else:
+        fornecedor_codigo = fornecedor_codigo[:7]
+        pyautogui.write(f"0{fornecedor_codigo}")
+    
+    pyautogui.press("tab")
+    pyautogui.press("tab")
 
-            print(data_vencimento)
-            pyautogui.write(f"{data_vencimento}")
-            pyautogui.press("tab")
-            pyautogui.write(f"{valor}")
+    print(data_vencimento)
+    pyautogui.write(f"{data_vencimento}")
+    pyautogui.press("tab")
+    pyautogui.write(f"{valor}")
 
-            while True:
-                try:
-                    x, y = pyautogui.locateCenterOnScreen('img/salvar.png', confidence=0.9)
-                    time.sleep(1) 
-                    pyautogui.click(x, y)
-                    break
-                except pyautogui.ImageNotFoundException:
-                    pass
+    while True:
+        try:
+            x, y = pyautogui.locateCenterOnScreen('img/salvar.png', confidence=0.9)
+            time.sleep(1) 
+            pyautogui.click(x, y)
+            break
+        except pyautogui.ImageNotFoundException:
+            pass
             time.sleep(1) 
 
 #Abrir o protheus
@@ -105,30 +107,41 @@ def abrir_protheus():
         except pyautogui.ImageNotFoundException:
             pass
 
+#Troca de banco
 def banco_troca(cod_banco):
-    x, y = pyautogui.locateCenterOnScreen('img/totvs.png', confidence=0.9)
-    pyautogui.click(x, y)
-    pyautogui.press("tab")
-    pyautogui.press("tab")
-    pyautogui.write(cod_banco)
-    time.sleep(1)
-    pyautogui.press("enter")
-    pyautogui.press("enter")
+    global banco_antigo
+    if banco_antigo != banco:
+        while True:
+            try:
+                x, y = pyautogui.locateCenterOnScreen('img/totvs.png', confidence=0.7)
+                pyautogui.click(x, y)
+                break
+            except pyautogui.ImageNotFoundException:
+                pass
+        pyautogui.press("tab")
+        pyautogui.press("tab")
+        pyautogui.write(cod_banco)
+        time.sleep(1)
+        pyautogui.press("enter")
+        pyautogui.press("enter")
+        banco_antigo = banco
 
 #Verificar o banco
 def verifica_banco():
-    global banco_antigo
-    banco_antigo = banco
     if banco == "Solutions Itaú":
         cod_banco = "0201"
     if banco == "Serviços Itaú":
         cod_banco = "0101"
     if banco == "Franqueadora Itaú":
         cod_banco = "0301"
+    print(cod_banco)
     banco_troca(cod_banco)
 
 # Função para iniciar o a inclusão de faturas
 def abrir_arquivo():
+    global numero
+    global banco_antigo
+    banco_antigo = ""
     data = date.today()
     data_str = data.strftime('%Y-%m-%d')
     data_format = data_str.replace("-", "")
@@ -177,14 +190,9 @@ def abrir_arquivo():
                     print(inserir)
                     continue
                 else:
-                    
-                    if numero != 1:
-                        if banco_antigo != banco:
-                            verifica_banco()
-                    else:
-                        verifica_banco()
-                    # chegar_inclusao()
-                    # incluir_cp()
+                    #verifica_banco()
+                    #chegar_inclusao()
+                    #incluir_cp()
 
         except Exception as e:
             print(f"Erro ao ler o arquivo: {e}")
