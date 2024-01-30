@@ -8,6 +8,12 @@ from datetime import date, datetime
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
 
+def comecar():
+    valor1 = diversos_valor.get()
+    valor2 = pagarme_valor.get()
+    valor3 = split_valor.get()
+    print(valor1, valor2, valor3)
+
 janela = customtkinter.CTk()
 janela.title("Hyperlocal")
 janela.iconbitmap("./img/icon.ico")
